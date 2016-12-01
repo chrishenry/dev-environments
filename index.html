@@ -27,10 +27,15 @@
 				color: #fdae6b;
 			}
 
-			.my-background {
-				background: rgba(0,0,0,0.8);
-				padding-bottom: 46px;
-			}
+      .my-background {
+        background: rgba(0,0,0,0.8);
+        padding: 46px !important;
+      }
+
+      .my-background h3 {
+        color:#fff !important;
+        margin:0px !important;
+      }
 
 			.reveal h1 {
 			    font-size: 3em;
@@ -62,13 +67,19 @@
 					</p>
 				</section>
 
+        <section>
+          <h3>A bit about me</h3>
+        </section>
+
 				<section>
 					<h3>DevOps</h3>
 					<p>A culture that emphasizes collaboration and communication between teams while automating the process of software delivery and infrastructure changes.</p>
-				</section>
+				  <aside>Also, define culture. The summation of what everyone does and says. Teams that don't talk about how they work have shifting cultures. Teams that don't talk about why the work are rudderless.</aside>
+        </section>
 
-				<section>
+				<section data-background="https://pbs.twimg.com/media/BhEWAlACEAAgcBQ.jpg" class="my-background">
 					<h3>Communication &amp; empathy</h3>
+
 				</section>
 
 				<section>
@@ -102,10 +113,12 @@
 
 					<section>
 						<h3>Config</h3>
+            Allow others to change behaviour of your app or change connections (db, otherwise)
 					</section>
 
-					<section>
-						<h3>Dev/Prod Parity</h3>
+					<section data-background="http://images.mentalfloss.com/sites/default/files/styles/insert_main_wide_image/public/8098.png">
+						<h3>Hi Fidelity Dev/Prod Parity</h3>
+            <aside>There's always that problem that some reports that you can never figure out. Part of reason for that is the difference between your dev and prod environments.</aside>
 					</section>
 
 				</section>
@@ -115,14 +128,25 @@
 					<p>How many people have an application running in production?</p>
 				</section>
 
-				<section data-background="http://images.mentalfloss.com/sites/default/files/styles/insert_main_wide_image/public/8098.png">
-					<h3>Hi Fidelity</h3>
-				</section>
+        <section>
 
-				<section>
-					<h3>Docker</h3>
-					<img src="https://www.docker.com/sites/default/files/legal/small_v.png" />
-				</section>
+  				<section>
+  					<h3>Docker</h3>
+  					<img src="https://www.docker.com/sites/default/files/legal/small_v.png" />
+            <aside>So, we talked about the culture of DevOps first, bc communication and empathy are where teamwork starts. Containers won't fix shitty culture or communication.</aside>
+  				</section>
+
+          <section>
+            <h3>Repeatability</h3>
+            <p>For you, your teammates, stage and production</p>
+          </section>
+
+          <section>
+            <h3>Isolation</h3>
+            <p>You're gonna be working on more than one project at a time, what happens if they require different versions of Ruby, MySQL, gems, etc.</p>
+          </section>
+
+        </section>
 
 				<section>
 					<h3>Questions?</h3>

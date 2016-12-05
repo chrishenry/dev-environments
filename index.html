@@ -45,6 +45,10 @@
 				width: 1050px !important;
 			}
 
+      .reveal pre code {
+        max-height: none !important;
+      }
+
 		</style>
 
 		<!-- Printing and PDF exports -->
@@ -74,20 +78,27 @@
 				<section>
 					<h3>DevOps</h3>
 					<p>A culture that emphasizes collaboration and communication between teams while automating the process of software delivery and infrastructure changes.</p>
-				  <aside>Also, define culture. The summation of what everyone does and says. Teams that don't talk about how they work have shifting cultures. Teams that don't talk about why the work are rudderless.</aside>
+				  <aside class="notes">Also, define culture. The summation of what everyone does and says. Teams that don't talk about how they work have shifting cultures. Teams that don't talk about why the work are rudderless.</aside>
         </section>
 
 				<section data-background="https://pbs.twimg.com/media/BhEWAlACEAAgcBQ.jpg" class="my-background">
-					<h3>Communication &amp; empathy</h3>
-
+					<h3>Communication &amp; Empathy</h3>
+          <ul>
+            <li>More important than the technical skills</li>
+          </ul>
 				</section>
 
 				<section>
 					<h3>Automation &amp;<br />Infrastructure as Code</h3>
+          <ul>
+            <li>Reduce friction from devs to prod</li>
+            <li>Allows others to understand and build your project</li>
+          </ul>
+          <aside class="notes"></aside>
 				</section>
 
 				<section>
-					<h3>Handoff &amp; delivery is important</h3>
+					<h3>Handoff &amp; Delivery is Important</h3>
 					<ul>
 						<li>Dependencies</li>
 						<li>Server Software</li>
@@ -105,20 +116,23 @@
 
 					<section>
 						<h3>Codebase</h3>
-					</section>
+            <aside class="notes">Pretty obvious. It's your rails app, django app.</aside>
+          </section>
 
-					<section>
-						<h3>Dependencies</h3>
+          <section>
+            <h3>Dependencies</h3>
+            <aside class="notes">Important to use, bc your efficiency depends on being able to make use of existing code. Your project won't run without them. So if they're not defined in a way that can be installed automatically, others won't be able to run your project.</aside>
 					</section>
 
 					<section>
 						<h3>Config</h3>
-            Allow others to change behaviour of your app or change connections (db, otherwise)
+            Allow others to change swap dependencies of your app or change connections (db, otherwise)
+            <aside class="notes">Going from dev to prod can't happen without this.</aside>
 					</section>
 
 					<section data-background="http://images.mentalfloss.com/sites/default/files/styles/insert_main_wide_image/public/8098.png">
 						<h3>Hi Fidelity Dev/Prod Parity</h3>
-            <aside>There's always that problem that some reports that you can never figure out. Part of reason for that is the difference between your dev and prod environments.</aside>
+            <aside class="notes">There's always that problem that some reports that you can never figure out. Part of reason for that is the difference between your dev and prod environments.</aside>
 					</section>
 
 				</section>
@@ -133,7 +147,7 @@
   				<section>
   					<h3>Docker</h3>
   					<img src="https://www.docker.com/sites/default/files/legal/small_v.png" />
-            <aside>So, we talked about the culture of DevOps first, bc communication and empathy are where teamwork starts. Containers won't fix shitty culture or communication.</aside>
+            <aside class="notes">So, we talked about the culture of DevOps first, bc communication and empathy are where teamwork starts. Containers won't fix shitty culture or communication.</aside>
   				</section>
 
           <section>
@@ -144,6 +158,86 @@
           <section>
             <h3>Isolation</h3>
             <p>You're gonna be working on more than one project at a time, what happens if they require different versions of Ruby, MySQL, gems, etc.</p>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section>
+            <h3>A little bit of code</h3>
+          </section>
+
+          <section>
+            <h3>Dockerfile</h3>
+            <pre><code data-trim data-noescape>
+FROM ruby:2.3.3
+
+RUN apt-get update -qq && \
+    apt-get install -y build-essential libpq-dev nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /rails-app
+WORKDIR /rails-app
+
+ADD Gemfile /rails-app/Gemfile
+ADD Gemfile.lock /rails-app/Gemfile.lock
+
+RUN bundle install
+ADD . /rails-app
+            </code></pre>
+          </section>
+
+          <section>
+            <h3>Docker Compose</h3>
+              <pre><code data-trim data-noescape>
+version: '2'
+services:
+  db:
+    image: mysql:latest
+    env_file: .env
+    volumes:
+      - ./mysql-data/:/var/lib/mysql/
+  web:
+    build:
+      context: ./rails-app/
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    env_file: .env
+    environment:
+      MYSQL_HOST: db
+    volumes:
+      - ./rails-app/:/rails-app/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+              </code></pre>
+          </section>
+
+          <section>
+            <h3>Environment File (.env)</h3>
+              <pre><code data-trim data-noescape>
+RAILS_ENV=docker-dev
+MYSQL_PORT=3306
+MYSQL_USER=your_user
+MYSQL_PASSWORD=password
+MYSQL_ROOT_PASSWORD=password
+MYSQL_DATABASE=your_database
+              </code></pre>
+          </section>
+
+          <section>
+            <h3>Database Yaml</h3>
+              <pre><code data-trim data-noescape>
+docker-dev:
+  <<: *default
+  database: <%= ENV['MYSQL_DATABASE'] %>
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+  host: <%= ENV['MYSQL_HOST'] %>
+  port: <%= ENV['MYSQL_PORT'] %>
+              </code></pre>
           </section>
 
         </section>
